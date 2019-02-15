@@ -1,0 +1,26 @@
+{
+  "name": "tide",
+  "version": "1.0.0",
+  "description": "Whitelist hashing service between Google Sheets and Google Buckets",
+  "main": "index.js",
+  "dependencies": {
+    "@google-cloud/storage": "^2.4.2",
+    "express": "^4.16.4",
+    "googleapis": "^27.0.0",
+    "js-md5": "^0.7.3",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "apidoc": "^0.17.6",
+    "eslint": "^5.7.0",
+    "nodemon": "^1.18.4"
+  },
+  "scripts": {
+    "generate-docs": "apidoc -i src -o docs",
+    "lint": "eslint \"src/**/*.js\"",
+    "start": "node src/server.js",
+    "start-dev": "nodemon"
+  },
+  "author": "",
+  "license": "ISC"
+}

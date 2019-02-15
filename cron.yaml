@@ -1,0 +1,6 @@
+cron:
+- description: "hourly whitelist update"
+  url: /hashEmails
+  schedule: every hours
+  X-Appengine-Cron: true
+
