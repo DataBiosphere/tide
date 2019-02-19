@@ -4,12 +4,6 @@ const md5 = require('js-md5')
 const {google} = require('googleapis')
 const {Storage} = require('@google-cloud/storage')
 
-//TO DO:
-//cron stuff (haven't tested)
-//added changes on saturn end (haven't tested)
-//deploy new app
-//create repo for all this
-
 
 const app = express()
 
