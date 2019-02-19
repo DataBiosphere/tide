@@ -2,7 +2,6 @@
   "name": "tide",
   "version": "1.0.0",
   "description": "Whitelist hashing service between Google Sheets and Google Buckets",
-  "main": "index.js",
   "dependencies": {
     "@google-cloud/storage": "^2.4.2",
     "express": "^4.16.4",
