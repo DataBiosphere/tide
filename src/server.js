@@ -21,14 +21,13 @@ app.get('/hashEmails', async (req, res) => {
         else {resolve(result)}
       })
     })
-
     const emails = _.flattenDeep(_.map(v => _.split(',', v), _.flattenDeep(result.data.values)))
     const trimmedEmails = _.map(v=>_.trim(v), emails)
     const hashedEmails = JSON.stringify(_.map(v=>md5(v), trimmedEmails))
     await storage.bucket('terra-tide-prod-data').file('whitelistEmails').save(hashedEmails)
     res.sendStatus(200)
   } catch (error) {
-    res.sendStatus(500)
+    res.status(500).send(error.toString())
     console.log(error)
   }
 })
