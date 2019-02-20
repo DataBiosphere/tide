@@ -2,6 +2,7 @@ const _ = require('lodash/fp')
 const express = require('express')
 const md5 = require('js-md5')
 const {google} = require('googleapis')
+const {auth} = require('google-auth-library')
 const {Storage} = require('@google-cloud/storage')
 
 
@@ -9,8 +10,8 @@ const app = express()
 
 app.get('/hashEmails', async (req, res) => {
   try {
-    const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'] })
-    const sheets = google.sheets({version: 'v4', auth})
+    const client = await auth.getClient({ scopes: 'https://www.googleapis.com/auth/spreadsheets.readonly' })
+    const sheets = google.sheets({version: 'v4', auth: client})
     const storage = new Storage()
 
     const result = await new Promise((resolve, reject) => {

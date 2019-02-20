@@ -5,6 +5,7 @@
   "dependencies": {
     "@google-cloud/storage": "^2.4.2",
     "express": "^4.16.4",
+    "google-auth-library": "^3.1.0",
     "googleapis": "^27.0.0",
     "js-md5": "^0.7.3",
     "lodash": "^4.17.11"
