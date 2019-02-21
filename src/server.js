@@ -10,6 +10,10 @@ const app = express()
 
 app.get('/hashEmails', async (req, res) => {
   try {
+    /*if (!(req.get('x-appengine-cron') === 'true')) {
+      res.status(403).end(JSON.stringify({ error: { message: 'unauthorized' } }))
+      return
+    }*/
     const client = await auth.getClient({ scopes: 'https://www.googleapis.com/auth/spreadsheets.readonly' })
     const sheets = google.sheets({ version: 'v4', auth: client })
     const storage = new Storage()
