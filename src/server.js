@@ -14,10 +14,15 @@ app.get('/hashEmails', async (req, res) => {
       res.status(403).end(JSON.stringify({ error: { message: 'unauthorized' } }))
       return
     }*/
-    const client = await auth.getClient({ scopes: 'https://www.googleapis.com/auth/spreadsheets.readonly' })
-    const sheets = google.sheets({ version: 'v4', auth: client })
+    const client = await auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'] })
+    const spreadsheetId = '1zYYMqJv90DJJ1_JDye7lJoE45x9z9oxuRPq5A-XLJ6M'
+    const range = 'B2:B'
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}`
+    const result = await client.request({url})
     const storage = new Storage()
 
+    /*
+    const sheets = google.sheets({ version: 'v4', auth: client })
     const result = await new Promise((resolve, reject) => {
       sheets.spreadsheets.values.get({
         spreadsheetId: '1zYYMqJv90DJJ1_JDye7lJoE45x9z9oxuRPq5A-XLJ6M',
@@ -26,6 +31,8 @@ app.get('/hashEmails', async (req, res) => {
         if (err) { reject(err) } else { resolve(result) }
       })
     })
+    */
+
     const emails = _.flattenDeep(_.map(v => _.split(',', v), _.flattenDeep(result.data.values)))
     const trimmedEmails = _.map(v => _.trim(v), emails)
     const hashedEmails = JSON.stringify(_.map(v => md5(v), trimmedEmails))
