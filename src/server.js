@@ -2,9 +2,7 @@ const _ = require('lodash/fp')
 const express = require('express')
 const md5 = require('js-md5')
 const { google } = require('googleapis')
-const { auth } = require('google-auth-library')
 const { Storage } = require('@google-cloud/storage')
-
 
 const app = express()
 
@@ -14,24 +12,31 @@ app.get('/hashEmails', async (req, res) => {
       res.status(403).end(JSON.stringify({ error: { message: 'unauthorized' } }))
       return
     }*/
-    const client = await auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'] })
-    const spreadsheetId = '1zYYMqJv90DJJ1_JDye7lJoE45x9z9oxuRPq5A-XLJ6M'
-    const range = 'B2:B'
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}`
-    const result = await client.request({url})
     const storage = new Storage()
+    const url = 'https://www.googleapis.com/storage/v1/b/terra-tide-data-utils/o/privatekey.json?alt=media'
+    const client = await google.auth.getClient({
+      scopes: 'https://www.googleapis.com/auth/devstorage.read_only'
+    })
+    const privatekey = await client.request({url})
+    let jwtClient = new google.auth.JWT(
+      privatekey.data.client_email,
+      null,
+      privatekey.data.private_key,
+      ['https://www.googleapis.com/auth/spreadsheets.readonly'])
+    jwtClient.authorize(function(err) {
+      if (err) { console.log(err) }
+    })
 
-    /*
-    const sheets = google.sheets({ version: 'v4', auth: client })
+    const sheets = google.sheets('v4')
     const result = await new Promise((resolve, reject) => {
       sheets.spreadsheets.values.get({
+        auth: jwtClient,
         spreadsheetId: '1zYYMqJv90DJJ1_JDye7lJoE45x9z9oxuRPq5A-XLJ6M',
         range: 'B2:B'
       }, (err, result) => {
         if (err) { reject(err) } else { resolve(result) }
       })
     })
-    */
 
     const emails = _.flattenDeep(_.map(v => _.split(',', v), _.flattenDeep(result.data.values)))
     const trimmedEmails = _.map(v => _.trim(v), emails)
