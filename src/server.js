@@ -8,22 +8,22 @@ const app = express()
 
 app.get('/hashEmails', async (req, res) => {
   try {
-    /*if (!(req.get('x-appengine-cron') === 'true')) {
+    if (!(req.get('x-appengine-cron') === 'true')) {
       res.status(403).end(JSON.stringify({ error: { message: 'unauthorized' } }))
       return
-    }*/
+    }
     const storage = new Storage()
     const url = 'https://www.googleapis.com/storage/v1/b/terra-tide-data-utils/o/privatekey.json?alt=media'
     const client = await google.auth.getClient({
       scopes: 'https://www.googleapis.com/auth/devstorage.read_only'
     })
-    const privatekey = await client.request({url})
-    let jwtClient = new google.auth.JWT(
+    const privatekey = await client.request({ url })
+    const jwtClient = new google.auth.JWT(
       privatekey.data.client_email,
       null,
       privatekey.data.private_key,
       ['https://www.googleapis.com/auth/spreadsheets.readonly'])
-    jwtClient.authorize(function(err) {
+    jwtClient.authorize(err =>  {
       if (err) { console.log(err) }
     })
 
