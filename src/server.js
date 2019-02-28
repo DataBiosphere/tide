@@ -13,11 +13,11 @@ app.get('/hashEmails', async (req, res) => {
       return
     }
     const storage = new Storage()
-    const url = 'https://www.googleapis.com/storage/v1/b/terra-tide-data-utils/o/privatekey.json?alt=media'
+    const privatekeyUrl = 'https://www.googleapis.com/storage/v1/b/terra-tide-data-utils/o/privatekey.json?alt=media'
     const client = await google.auth.getClient({
       scopes: 'https://www.googleapis.com/auth/devstorage.read_only'
     })
-    const privatekey = await client.request({ url })
+    const privatekey = await client.request({ url: privatekeyUrl })
     const jwtClient = new google.auth.JWT(
       privatekey.data.client_email,
       null,
